@@ -8,57 +8,58 @@ import FONTS from '../../../constants/theme';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-
-
-
+import CustomButton from '../../../src/components/CustomButton';
+import img from '../../../assets/images/myprofil.jpg';
+import Api from '../../../ApiUrl/Api'
 const Profil = () => {
   const navigation = useNavigation();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
+  const [userImageUrl, setUserImageUrl] = useState(null);
+  const domainName = 'http://192.168.1.13:5000/';
 
+
+  const fetchUserData = async () => {
+    try {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+
+
+        const response = await Api.get('/currentclient/jwtid', {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        });
+
+
+        const imageUrl = `${domainName}${response.data?.picture}`;
+
+        setUserImageUrl(imageUrl);
+        setUser(response.data)
+
+
+
+
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données utilisateur :', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('token');
 
-        console.log("utilisateur .....", storedToken);
-        if (storedToken) {
-
-
-          const response = await axios.get('http://192.168.1.11:5000/jwtid', {
-            headers: { Authorization: `Bearer ${storedToken}` }
-          });
-
-          const userData = response.data;
-          const userId = userData;
-          setUser(userData);
-
-          console.log("ID de l'utilisateur :", userId);
-          const url = `http://192.168.1.11:5000/api/user/${userId}`;
-          const response2 = await axios.get(url, {
-            headers: {
-              'Authorization': `Bearer ${storedToken}`
-            }
-          });
-
-          const userData2 = response2.data;
-          setUser(userData2);
-        }
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données utilisateur :', error);
-      }
-    };
 
     fetchUserData();
-  }, []);
+  }, [userImageUrl,user]);
 
 
 
   return (
     <View style={styles.containerTou2}>
       <TouchableOpacity  >
-
-      <Image source={require('../../../assets/images/myprofil.jpg')} style={styles.image}/>
+      {  userImageUrl   ? (
+        <Image source={{uri: userImageUrl}} style={styles.image} />
+      ) : (
+        <Image source={img} style={styles.image} />
+      )}
+      {/* <Image source={{uri:'http://192.168.1.13:5000/api/user/client/fileupload'}}  style={styles.image}/> */}
       <View style={styles.View2}>
               <MaterialIcons
               name="photo-camera"
@@ -69,8 +70,11 @@ const Profil = () => {
       <View>
       {user ? (
         <View style={{
-          marginRight:220,
-          marginVertical:45,
+          marginRight:360,
+          marginVertical:70,
+          paddingHorizontal: 50
+
+
         }}>
           <Text style={{
             fontWeight:'bold',
@@ -78,49 +82,109 @@ const Profil = () => {
             fontSize:20,
 
           }}>Profil</Text>
+
           <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-             left:0}}>
+           flexDirection: 'row',
+            //alignItems: 'center',
+            // left:0 ,
+             //flexWrap: 'wrap'
+
+             }}>
+
           <MaterialIcons
             name="feed"
-            size={24}
+            size={45}
             color={COLORS.bgColor}
 
           />
 
+        <View >
+        <Text style={{
+           ...FONTS.FONTS.h4,
+           fontWeight:25,
+           color:COLORS.black,
+
+          }}>Nom: </Text>
+            <View style={{}} >
+           <Text style={{color:COLORS.black }}>{user.nom} </Text>
+           </View>
+           </View>
+          </View>
+
+
+
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+             left:0,
+             marginVertical:10}}>
+          <MaterialIcons
+            name="feed"
+            size={45}
+            color={COLORS.bgColor}
+
+          />
+          <View>
           <Text style={{
            ...FONTS.FONTS.h4,
            fontWeight:25,
-           color:COLORS.black
-          }}>Nom: </Text>
-          <Text style={{color:COLORS.black}}>{user.pseudo} </Text>
+           color:COLORS.black,
+          }}>Prenom: </Text>
+          <View>
+          <Text style={{color:COLORS.black}}>{user.prenom} </Text>
+          </View>
+          </View>
           </View>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
-             left:0}}>
+             left:0 }}>
           <MaterialIcons
             name="email"
-            size={24}
+            size={45}
             color={COLORS.bgColor}
 
           />
+          <View>
           <Text style={{
             ...FONTS.FONTS.h4,
             fontWeight:25,
             color:COLORS.black
 
           }}>Email: </Text>
+          <View>
           <Text style={{color:COLORS.black }}>{user.email}</Text>
-
+          </View>
+          </View>
         </View>
+        <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+             left:0 ,marginVertical:10 }}>
+          <MaterialIcons
+            name="feed"
+            size={45}
+            color={COLORS.bgColor}
+
+          />
+          <View>
+          <Text style={{
+           ...FONTS.FONTS.h4,
+           fontWeight:25,
+           color:COLORS.black
+          }}>Rôle: </Text>
+          <View>
+          <Text style={{color:COLORS.black}}>{user.role} </Text>
+          </View>
+          </View>
+          </View>
         </View>
       ) : (
         <Text>Chargement des informations utilisateur...</Text>
       )}
+
     </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           backgroundColor: COLOR.COLORS.primary,
           height:45,
@@ -131,7 +195,8 @@ const Profil = () => {
         >
         <Text style={{...FONTS.FONTS.body3,color:COLORS.white}}
         onPress={()=>navigation.navigate('EditProfil')}>modifier vos données</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <CustomButton text="modifier vos données"  onPress={()=>navigation.navigate('EditProfil',{state:user})} type="PRIMARY"/>
 
     </View>
   )
@@ -139,13 +204,14 @@ const Profil = () => {
 const styles = StyleSheet.create({
   containerTou2:{
     alignItems:'center',
-    marginVertical:22
+    marginVertical:22,
+
   },
   image:{
     width: 170,
     height: 170,
     borderRadius:85,
-    borderColor: COLORS.primary2
+
 
   },
   View2:{

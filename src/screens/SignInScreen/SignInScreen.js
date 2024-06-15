@@ -8,6 +8,7 @@ import { useForm, Controller } from "react-hook-form";
 import axios from 'axios';
 import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Api from '../../../ApiUrl/Api'
 
 
 const SignInScreen = () => {
@@ -39,12 +40,10 @@ const SignInScreen = () => {
 
 
     const onsignInPressed = async(data)=>{
-      console.log(data)
       try{
-        const res= await axios.post("http://192.168.1.11:5000/api/user/login", data)
-
+        const res= await Api.post("/api/user/client/login", data)
         if(res.data){
-           console.log(res.data);
+
            await AsyncStorage.setItem('token', JSON.stringify(res.data));
            setToken(res.data)
           navigation.navigate('BottomTabNavigator')
@@ -66,9 +65,9 @@ const SignInScreen = () => {
     }
 
   return (
-    <View style={[styles.root, { backgroundColor: theme.colors.background } ]}>
+    <View style={[styles.root, { backgroundColor: theme.colors.primary } ]}>
     <View style={[styles.logoContainer ]}>
-       <Text style={styles.title}>Bienvenue !</Text>
+       <Text style={styles.title}></Text>
     </View>
     <View  style={[styles.formContainer , { backgroundColor: theme.colors.primary }]}>
     <CustomInput

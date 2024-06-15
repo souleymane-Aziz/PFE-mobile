@@ -7,6 +7,10 @@ import { useNavigation } from '@react-navigation/native';
 import {useForm} from 'react-hook-form'
 import axios from 'axios';
 import { useTheme } from 'react-native-paper';
+import CustomPicker from '../../components/CustomPicker';
+import {Picker} from '@react-native-picker/picker';
+import Api from '../../../ApiUrl/Api'
+
 
 const SignUpScreen = () => {
   const {height} = useWindowDimensions();
@@ -14,14 +18,28 @@ const SignUpScreen = () => {
    const pwd = watch('password')
    const navigation = useNavigation()
    const theme = useTheme();
-
    const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-
+  const [selectedRole, setSelectedRole] = useState('');
+  const roles = [
+    { label: 'Sélectionner le rôle', value: '' },
+    { label: 'Client', value: 'Client' },
+    { label: 'Utilisateur', value: 'Utilisateur' },
+  ];
     const onRegisterPressed = async(data)=>{
-     console.log(data)
-     axios.post("http://192.168.1.11:5000/api/user/register", data)
+   console.log("data",data.email)
+     Api.post("/api/user/client/register",
+
+     {email: data?.email,
+      nom: data?.nom,
+      password: data?.password,
+       prenom: data?.prenom,
+       role:selectedRole
+
+      }
+
+      )
     .then(res => console.log(res.data))
     .catch(e=>console.log(e))
 
@@ -39,24 +57,38 @@ const SignUpScreen = () => {
     }
   return (
 
-    <View  style={[styles.root,  { backgroundColor: theme.colors.background } ]}>
+    <View  style={[styles.root,  { backgroundColor: theme.colors.primary } ]}>
       <View style={styles.logo} >
-      <Text style={styles.title2}>Bienvenue !</Text>
+      <Text style={styles.title2}></Text>
       </View>
       <View style={[ styles.formContainer , { backgroundColor: theme.colors.primary} ]} >
     <Text style={styles.title1}>Créer un compte </Text>
     <CustomInput
-    name="pseudo"
-    placeholder="pseudo"
+    name="nom"
+    placeholder="nom"
     control={control}
     icon={{ name: 'user', size: 25 }}
-    rules={{required:'le pseudo est obligatoire' ,
+    rules={{required:'le nom est obligatoire' ,
     minLength:
     {value: 3 ,
-    message: 'le pseudo doit comporter au moins 3 caractères'},
+    message: 'le nom doit comporter au moins 3 caractères'},
     maxLength:
     {value: 24 ,
-    message: 'le pseudo doit comporter au maximum 24 caractères'}
+    message: 'le nom doit comporter au maximum 24 caractères'}
+  }}
+    />
+    <CustomInput
+    name="prenom"
+    placeholder="prenom"
+    control={control}
+    icon={{ name: 'user', size: 25 }}
+    rules={{required:'le prenom est obligatoire' ,
+    minLength:
+    {value: 3 ,
+    message: 'le prenom doit comporter au moins 3 caractères'},
+    maxLength:
+    {value: 50 ,
+    message: 'le prenom doit comporter au maximum 24 caractères'}
   }}
     />
     <CustomInput
@@ -90,6 +122,13 @@ const SignUpScreen = () => {
       value === pwd || 'Le mot de passe ne correspond pas'
     }}
     />
+
+   <CustomPicker
+      name="role"
+      options={roles}
+      selectedValue={selectedRole}
+      onValueChange={itemValue => setSelectedRole(itemValue)}
+    />
     <CustomButton text="Register" onPress={handleSubmit(onRegisterPressed) } type="PRIMARY"/>
 
     <Text style={styles.text}>
@@ -104,10 +143,9 @@ const SignUpScreen = () => {
 const styles = StyleSheet.create({
      root:{
       flex:1
-
      },
      formContainer:{
-      flex:3.5,
+      flex:7,
       alignItems: 'center',
       padding:20,
       borderTopLeftRadius: 20, // Arrondir le coin supérieur gauche
@@ -138,6 +176,52 @@ const styles = StyleSheet.create({
      },
      link:{
        color:'#FDB075'
-     }
+     },
+     dropdownButtonStyle: {
+      width: 200,
+      height: 50,
+      backgroundColor: '#E9ECEF',
+      borderRadius: 12,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 12,
+    },
+    dropdownButtonTxtStyle: {
+      flex: 1,
+      fontSize: 18,
+      fontWeight: '500',
+      color: '#151E26',
+
+    },
+    dropdownButtonArrowStyle: {
+      fontSize: 28,
+    },
+    dropdownButtonIconStyle: {
+      fontSize: 28,
+      marginRight: 8,
+    },
+    dropdownMenuStyle: {
+      backgroundColor: '#E9ECEF',
+      borderRadius: 8,
+    },
+    dropdownItemStyle: {
+      width: '100%',
+      flexDirection: 'row',
+      paddingHorizontal: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 8,
+    },
+    dropdownItemTxtStyle: {
+      flex: 1,
+      fontSize: 18,
+      fontWeight: '500',
+      color: '#151E26',
+    },
+    dropdownItemIconStyle: {
+      fontSize: 28,
+      marginRight: 8,
+    },
 });
 export default SignUpScreen;

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
      borderRadius:20
     },
     container_PRIMARY:{
-        backgroundColor:'#FF0000',
+        backgroundColor:'#2B97EB',
 
     },
     container_SECONDARY:{

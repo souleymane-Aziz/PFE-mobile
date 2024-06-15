@@ -1,18 +1,29 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import COLORS from '../../../constants/color'
+import { View, Text ,StyleSheet} from 'react-native'
+import React,{ useState, useEffect } from 'react'
+import { Camera, useCameraDevice, NoCameraErrorView } from 'react-native-vision-camera';
+
+
 const Scanner = () => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          
-        }}>
-        <Text>Scanner!</Text>
+
+  const device = useCameraDevice('front')
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+  const checkPermission = async () => {
+    const newCameraPermission = await Camera.requestCameraPermission();
+    const newMicrophonePermission = await Camera.requestMicrophonePermission();
+    console.log(newCameraPermission)
+  };
+
+
+  if (device == null) return <NoCameraDeviceError />
+  return (
+    <View style={{flex:1}}>
+      <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
       </View>
-    );
+
+  )
   };
 
   export default Scanner;

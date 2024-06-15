@@ -2,7 +2,8 @@ import { View, Text ,TextInput ,StyleSheet} from 'react-native'
 import React from 'react'
 import {  Controller } from "react-hook-form";
 import Icon from 'react-native-vector-icons/FontAwesome';
-const CustomInput = ({control , name ,rules = {}, placeholder ,secureTextEntry,icon}) => {
+import { Picker } from '@react-native-picker/picker';
+const CustomInput = ({control ,value, name ,rules = {}, placeholder ,secureTextEntry,icon, onValueChange, items,label }) => {
 
   return (
 
@@ -11,6 +12,7 @@ const CustomInput = ({control , name ,rules = {}, placeholder ,secureTextEntry,i
       control={control}
       name={name}
       rules={rules}
+      value={value}
 
       render={({field:{value , onChange , onBlur},fieldState: {error}})=>(
         <>
@@ -25,6 +27,18 @@ const CustomInput = ({control , name ,rules = {}, placeholder ,secureTextEntry,i
         style={styles.input }
 
         />
+        {/* <Picker
+        selectedValue={value}
+        onValueChange={onChange}
+        style={{ height: 50, width: 380 }}
+      >
+        {items &&
+          items.map((item, index) => (
+            <Picker.Item key={index} label={item.label} value={item.value} />
+          ))}
+      </Picker> */}
+
+
         </View>
         {error && (<Text style={{color:'red', alignSelf:'stretch' }}>{error.message || 'Error'}</Text>)}
         </>
