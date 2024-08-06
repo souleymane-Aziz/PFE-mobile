@@ -116,7 +116,6 @@ const SignUpScreen = () => {
     control={control}
     secureTextEntry={true}
     icon={{ name: 'lock', size: 25 }}
-
     rules={{ required:'La répétition du mot de passe est obligatoire',
       validate: value =>
       value === pwd || 'Le mot de passe ne correspond pas'

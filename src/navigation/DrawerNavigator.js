@@ -28,7 +28,7 @@ function DrawerNavigator() {
       <Drawer.Screen name={ROUTES.ACCUEIL}
        component={BottomTabNavigator}
        options={{
-        title: 'Accueil',
+        title: 'index',
         headerShown:false,
         drawerIcon: ({focused, color, size}) => (
           <Icon name="storefront-sharp" size={18} color={color} />

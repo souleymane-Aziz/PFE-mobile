@@ -6,7 +6,9 @@ const theme = {
     ...DefaultTheme.colors,
     primary: '#F9FBFC',
     accent: 'red',
-    background: '#FF0000'
+    background: '#FF0000',
+    bleu:'#2B97EB',
+    green:'#616A6B'
   },
 
   images: {

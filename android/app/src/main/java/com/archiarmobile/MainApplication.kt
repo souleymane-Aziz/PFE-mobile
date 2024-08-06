@@ -12,7 +12,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.oblador.vectoricons.VectorIconsPackage;
-
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =

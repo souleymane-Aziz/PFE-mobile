@@ -12,9 +12,8 @@ import Scanner from '../../screens/home/Scanner';
 import Profil from '../../screens/home/Profil';
 import Apropos from '../../screens/home/Apropos'
 const TabArr = [
-  { route: 'Accueil', label: 'Accueil', type: Icons.Feather, icon: 'home', component: ColorScreen ,component:Accueil },
+  { route: 'index', label: 'Accueil', type: Icons.Feather, icon: 'home', component: ColorScreen ,component:Accueil },
   { route: 'MesProjets', label: 'MesProjets', type: Icons.Feather, icon: 'folder', component: ColorScreen,component:MesProjets },
-  { route: 'Scanner', label: 'Scanner', type: Icons.Feather, icon: 'camera', component: ColorScreen,component:Scanner },
   { route: 'Profil', label: 'Profil', type: Icons.FontAwesome, icon: 'user-circle', component: ColorScreen , component:Profil  },
   { route: 'Apropos', label: 'Apropos', type: Icons.FontAwesome, icon: 'bookmark-o', component: ColorScreen ,component:Apropos },
 ];
@@ -84,7 +83,8 @@ export default function AnimTab1() {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          
+
+
           tabBarStyle: styles.tabBar,
 
         }}
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryclair,
     borderRadius: 25,
   },
   text: {
