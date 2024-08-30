@@ -93,7 +93,7 @@ const SignInScreen = () => {
 
 
 
-    <CustomButton text="SignIn" onPress={handleSubmit(onsignInPressed) } type="PRIMARY"/>
+    <CustomButton text="Se connecter" onPress={handleSubmit(onsignInPressed) } type="PRIMARY"/>
     <CustomButton text="Mot de passe oublié" onPress={onForgetPasswordPressed } type="TERTIARY"/>
     <CustomButton text="Vous n'avez pas un compte?créer une" onPress={onSignInPressed } type="TERTIARY"/>
     </View>

@@ -25,7 +25,7 @@ const SignUpScreen = () => {
   const roles = [
     { label: 'Sélectionner le rôle', value: '' },
     { label: 'Client', value: 'Client' },
-    { label: 'Utilisateur', value: 'Utilisateur' },
+    { label: 'Agent', value: 'Agent' },
   ];
     const onRegisterPressed = async(data)=>{
    console.log("data",data.email)
@@ -128,7 +128,7 @@ const SignUpScreen = () => {
       selectedValue={selectedRole}
       onValueChange={itemValue => setSelectedRole(itemValue)}
     />
-    <CustomButton text="Register" onPress={handleSubmit(onRegisterPressed) } type="PRIMARY"/>
+    <CustomButton text="Registre" onPress={handleSubmit(onRegisterPressed) } type="PRIMARY"/>
 
     <Text style={styles.text}>
         en vous inscrivant, vous confirmez que vous acceptez nos {''}

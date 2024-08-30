@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
   topContainer: {
     height: 300, // Hauteur fixe pour empêcher le repli
     alignItems: 'center',
-    borderBottomLeftRadius: 200,
-    borderBottomRightRadius: 200,
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 100,
     justifyContent: 'center',
     paddingTop: 50,
     borderWidth: 4, // Épaisseur de la bordure

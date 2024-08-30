@@ -7,8 +7,8 @@ import Svg, { Rect, Text as SvgText, Line } from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
 import Api from '../../../ApiUrl/Api'
 
-const SERVER_URL = 'http://192.168.1.11:5000/api/detection/detect'; // Replace with your server address
-const SERVER_URL_PHOTO = 'http://192.168.1.11:5000/api/projets//upload-photo/:projectId';
+const SERVER_URL = 'http://192.168.1.19:5000/api/detection/detect'; // Replace with your server address
+const SERVER_URL_PHOTO = 'http://192.168.1.19:5000/api/projets//upload-photo/:projectId';
 
 const CameraScreen = () => {
   const cameraRef = useRef(null);

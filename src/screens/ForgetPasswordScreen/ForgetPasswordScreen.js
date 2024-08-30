@@ -24,8 +24,8 @@ const ForgetPasswordScreen= () => {
     <View style={styles.root}>
     <Text style={styles.title}>Réinitialisez votre mot de passe </Text>
     <CustomInput
-    name="Username"
-    placeholder="Username"
+    name="email"
+    placeholder="email"
     control={control}
     rules= {{required: 'Le nom d\'utilisateur est obligatoire'}}
     />

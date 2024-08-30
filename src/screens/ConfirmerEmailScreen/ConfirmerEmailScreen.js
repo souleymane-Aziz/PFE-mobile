@@ -42,7 +42,7 @@ const ConfirmerEmailScreen= () => {
 
   return (
     <View style={styles.root}>
-    <Text style={styles.title}>Confirmer your Email </Text>
+    <Text style={styles.title}> Confirmez votre Email </Text>
     <CustomInput
     name="email"
     placeholder="Email"
@@ -52,18 +52,18 @@ const ConfirmerEmailScreen= () => {
     />
     <CustomInput
     name="confirmationCode"
-    placeholder="Enter your confirmation code"
+    placeholder="Entrez votre code de confirmation"
     control={control}
-    rules={{required:'confirmation code is required' }}
+    rules={{required:'confirmation code est obligatoire' }}
     icon={{ name: 'lock', size: 25 }}
     secureTextEntry
     />
 
-    <CustomButton text="Confirm" onPress={handleSubmit(onConfirmPressed) } type="PRIMARY"/>
+    <CustomButton text="Confirmer" onPress={handleSubmit(onConfirmPressed) } type="PRIMARY"/>
 
-    <CustomButton text="Resent code" onPress={onResendPressed } type="SECONDARY"/>
+    <CustomButton text="Renvoyer le code" onPress={onResendPressed } type="SECONDARY"/>
 
-        <CustomButton text="Back to sign in" onPress={onsignUpPressed } type="TERTIARY"/>
+        <CustomButton text="Retour pour vous connecter" onPress={onsignUpPressed } type="TERTIARY"/>
     </View>
   )
 }
