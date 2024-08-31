@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { View,Text } from 'react-native-animatable';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
+import CustomInputArea from '../../components/CustomInputArea';
 import { useForm, Controller } from "react-hook-form";
 import CustomPicker from '../../components/CustomPicker';
 import { useNavigation } from '@react-navigation/native';
@@ -35,7 +36,7 @@ const Projet = ({}) => {
           rules={{ required: 'Le nom du projet est obligatoire' }}
         />
         {errors.nomProjet && <Text style={styles.errorText}>{errors.nomProjet.message}</Text>}
-        <CustomInput
+        <CustomInputArea
           name="description"
           placeholder="Description du projet"
           control={control}
