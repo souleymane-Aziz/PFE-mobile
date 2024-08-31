@@ -13,6 +13,7 @@ export default function ColorScreen({ route, navigation }) {
     switch (route.name) {
       case 'Accueil': { setBgColor(Colors.gray1); break; }
       case 'MesProjets': { setBgColor(Colors.gray1); break; }
+      case 'listesProjets': { setBgColor(Colors.gray1); break; }
       case 'Scanner': { setBgColor(Colors.gray1); break; }
       case 'Profil': { setBgColor(Colors.gray1); break; }
       case 'Apropos': { setBgColor(Colors.gray1); break; }

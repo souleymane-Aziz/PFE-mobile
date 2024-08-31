@@ -10,10 +10,12 @@ import Accueil from '../../screens/home/Accueil';
 import MesProjets from '../../screens/home/MesProjets';
 import Scanner from '../../screens/home/Scanner';
 import Profil from '../../screens/home/Profil';
-import Apropos from '../../screens/home/Apropos'
+import Apropos from '../../screens/home/Apropos';
+import listesProjets from '../../screens/home/listesProjets'
 const TabArr = [
   { route: 'index', label: 'Accueil', type: Icons.Feather, icon: 'home', component: ColorScreen ,component:Accueil },
   { route: 'MesProjets', label: 'MesProjets', type: Icons.Feather, icon: 'folder', component: ColorScreen,component:MesProjets },
+  { route: 'listesProjets', label: 'listesProjets', type: Icons.Feather, icon: 'list', component: ColorScreen,component:listesProjets },
   { route: 'Profil', label: 'Profil', type: Icons.FontAwesome, icon: 'user-circle', component: ColorScreen , component:Profil  },
   { route: 'Apropos', label: 'Apropos', type: Icons.FontAwesome, icon: 'bookmark-o', component: ColorScreen ,component:Apropos },
 ];

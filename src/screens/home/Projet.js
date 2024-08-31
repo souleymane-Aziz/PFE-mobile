@@ -6,30 +6,14 @@ import { useForm, Controller } from "react-hook-form";
 import CustomPicker from '../../components/CustomPicker';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
-import Api from '../../../ApiUrl/Api'
+import Api from '../../../ApiUrl/Api';
+import { useTheme } from 'react-native-paper';
+
 const Projet = ({}) => {
   const [selectedtype, setSelectedtype] = useState('');
   const navigation = useNavigation()
-  const types = [
-    { label: "Sélectionner Etage", value: '' },
-    { label: 'chambre principale', value: 'chambre principale' },
-    { label: 'chambre enfant', value: 'chambre enfant' },
-
-  ];
-  const [selectedEtage, setSelectedEtage] = useState('');
-  const etages = [
-    { label: "Sélectionner Etage", value: '' },
-    { label: '1er Etage', value: '1er Etage' },
-    { label: '2eme Etage', value: '2eme Etage' },
-    { label: '3eme Etage', value: '3eme Etage' },
-    { label: '4eme Etage', value: '4eme Etage' },
-    { label: '5eme Etage', value: '5eme Etage' },
-    { label: '7eme Etage', value: '6eme Etage' },
-    { label: '8eme Etage', value: '7eme Etage' },
-    { label: '9eme Etage', value: '8eme Etage' },
-    { label: '10eme Etage', value: '9eme Etage' },
-  ];
-  const {control , handleSubmit} = useForm();
+  const theme = useTheme();
+  const {control , handleSubmit , formState: { errors }} = useForm();
   const projetPressed = async(data)=>{
   Api.post('/api/projets/CreateProjet',data)
   .then(res => console.log(res.data))
@@ -37,77 +21,52 @@ const Projet = ({}) => {
     navigation.navigate('CameraScreen')
   }
     return (
-      <View  style={Styles.container}>
-          <CustomInput
-          name="nomProjet"
-          placeholder="nomProjet"
-          control={control}
-          icon={{ name: 'user', size: 25 }}
-          rules={{required:'le nomProjet est obligatoire' ,
-          minLength:
-          {value: 3 ,
-          message: 'le nomProjet doit comporter au moins 3 caractères'},
-          maxLength:
-          {value: 24 ,
-          message: 'le nomProjet doit comporter au maximum 24 caractères'}
-          }}
-          />
-          <CustomInput
-          name="createur"
-          placeholder="createur"
-          control={control}
-          icon={{ name: 'th', size: 25 }}
-          rules={{required:'le createur est obligatoire' ,
-          minLength:
-          {value: 3 ,
-          message: 'le createur doit comporter au moins 3 caractères'},
-          maxLength:
-          {value: 24 ,
-          message: 'le createur doit comporter au maximum 24 caractères'}
-          }}
-          />
-          <CustomInput
-          name="nomPiece"
-          placeholder="nomPiece"
-          control={control}
-          icon={{ name: 'th', size: 25 }}
-          rules={{required:'le nomPiece est obligatoire' ,
-          minLength:
-          {value: 3 ,
-          message: 'le nomPiece doit comporter au moins 3 caractères'},
-          maxLength:
-          {value: 24 ,
-          message: 'le nomPiece doit comporter au maximum 24 caractères'}
-          }}
-          />
-          <CustomInput
-          name="nombrePiece"
-          placeholder="nombrePiece"
-          control={control}
-          icon={{ name: 'th', size: 25 }}
 
-          />
-
-          {/* <CustomPicker
-          name="etage"
-          options={etages}
-          selectedValue={selectedEtage}
-          onValueChange={itemValue => setSelectedEtage(itemValue)}
-        /> */}
-        {/* <CustomPicker
-          name="type"
-          options={types}
-          selectedValue={selectedtype}
-          onValueChange={itemValue => setSelectedtype(itemValue)}
-        /> */}
-      <View  style={Styles.custombutton}>
-
-          <CustomButton text="Enregistrer" onPress={handleSubmit(projetPressed) } type="PRIMARY"/>
-     </View>
+      <View style={[styles.root, { backgroundColor: theme.colors.bleu }]}>
+      <View style={styles.logo}>
+        <Text style={styles.title2}>Créer un Projet</Text>
       </View>
+      <View style={[styles.formContainer, { backgroundColor: theme.colors.primary }]}>
+        <CustomInput
+          name="nomProjet"
+          placeholder="Nom du Projet"
+          control={control}
+          icon={{ name: 'th', size: 25 }}
+          rules={{ required: 'Le nom du projet est obligatoire' }}
+        />
+        {errors.nomProjet && <Text style={styles.errorText}>{errors.nomProjet.message}</Text>}
+        <CustomInput
+          name="description"
+          placeholder="Description du projet"
+          control={control}
+          icon={{ name: 'file-text-o', size: 25 }}
+          rules={{ required: 'La description du projet est obligatoire' }}
+        />
+        {errors.description && <Text style={styles.errorText}>{errors.description.message}</Text>}
+        <CustomInput
+          name="nomPiece"
+          placeholder="Nom de la Pièce"
+          control={control}
+          icon={{ name: 'home', size: 25 }}
+          rules={{ required: 'Le nom de la pièce est obligatoire' }}
+        />
+        {errors.nomPiece && <Text style={styles.errorText}>{errors.nomPiece.message}</Text>}
+        <CustomInput
+          name="nombrePiece"
+          placeholder="Nombre de Pièces"
+          control={control}
+          keyboardType="numeric"
+          icon={{ name: 'home', size: 25 }}
+          rules={{ required: 'Le nombre de pièces est obligatoire', pattern: { value: /^[0-9]+$/, message: 'Le nombre de pièces doit être un nombre entier' } }}
+        />
+        {errors.nombrePiece && <Text style={styles.errorText}>{errors.nombrePiece.message}</Text>}
+       <CustomButton  text="Créer le Projet" onPress={handleSubmit(projetPressed)} type="PRIMARY" />
+      </View>
+    </View>
+
     );
   };
-  const Styles = StyleSheet.create({
+  const styles = StyleSheet.create({
    container:{
     flex:1,
     padding:20
@@ -115,6 +74,35 @@ const Projet = ({}) => {
    custombutton:{
     padding:20,
     marginHorizontal:140
-   }
+   },
+   root: {
+    flex: 1,
+  },
+  formContainer: {
+    flex: 3.5,
+    alignItems: 'center',
+    padding: 20,
+    borderTopLeftRadius: 20, // Arrondir le coin supérieur gauche
+    borderTopRightRadius: 20, // Arrondir le coin supérieur droit
+  },
+  logo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title2: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    margin: 10,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
+  button:{
+    padding:30,
+    marginHorizontal:120
+  }
   })
 export default  Projet

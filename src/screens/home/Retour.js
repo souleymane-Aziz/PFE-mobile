@@ -20,7 +20,7 @@ const Retour = ({ navigation }) => {
         ))}
       </View>
       <View style={styles.containerCustomButton}>
-        <CustomButton text="Ajouter Une pièce" onPress={() => navigation.navigate('Projet')} type="PRIMARY" />
+        <CustomButton text="Ajouter Un projet" onPress={() => navigation.navigate('Projet')} type="PRIMARY" />
       </View>
       <View>
         <Text style={styles.title}>Demo Project</Text>
