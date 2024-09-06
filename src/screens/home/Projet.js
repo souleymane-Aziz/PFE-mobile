@@ -1,29 +1,35 @@
-import React,{useState} from 'react';
-import { View,Text } from 'react-native-animatable';
-import CustomButton from '../../components/CustomButton';
-import CustomInput from '../../components/CustomInput';
-import CustomInputArea from '../../components/CustomInputArea';
-import { useForm, Controller } from "react-hook-form";
-import CustomPicker from '../../components/CustomPicker';
+import { View, Text, StyleSheet, useWindowDimensions, Alert } from 'react-native';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
-import Api from '../../../ApiUrl/Api';
+import CustomInput from '../../components/CustomInput';
+import CustomButton from '../../components/CustomButton';
+import CustomInputArea from '../../components/CustomInputArea';
 import { useTheme } from 'react-native-paper';
 
-const Projet = ({}) => {
-  const [selectedtype, setSelectedtype] = useState('');
-  const navigation = useNavigation()
+const ProjetScreen = () => {
+  const { height } = useWindowDimensions();
+  const navigation = useNavigation();
   const theme = useTheme();
-  const {control , handleSubmit , formState: { errors }} = useForm();
-  const projetPressed = async(data)=>{
-  Api.post('/api/projets/CreateProjet',data)
-  .then(res => console.log(res.data))
-    .catch(e=>console.log(e))
-    navigation.navigate('CameraScreen')
-  }
-    return (
 
-      <View style={[styles.root, { backgroundColor: theme.colors.bleu }]}>
+  const { control, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('http://192.168.1.2:5000/api/projets/CreateProjet', data, {
+        withCredentials: true,
+      });
+      Alert.alert('Succès', 'Projet créé avec succès');
+      navigation.navigate('CameraScreen'); // Remplacez 'Home' par l'écran vers lequel vous voulez naviguer après la création du projet
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erreur', 'Une erreur est survenue lors de la création du projet');
+    }
+  };
+
+  return (
+    <View style={[styles.root, { backgroundColor: theme.colors.bleu }]}>
       <View style={styles.logo}>
         <Text style={styles.title2}>Créer un Projet</Text>
       </View>
@@ -43,6 +49,7 @@ const Projet = ({}) => {
           icon={{ name: 'file-text-o', size: 25 }}
           rules={{ required: 'La description du projet est obligatoire' }}
         />
+
         {errors.description && <Text style={styles.errorText}>{errors.description.message}</Text>}
         <CustomInput
           name="nomPiece"
@@ -61,22 +68,14 @@ const Projet = ({}) => {
           rules={{ required: 'Le nombre de pièces est obligatoire', pattern: { value: /^[0-9]+$/, message: 'Le nombre de pièces doit être un nombre entier' } }}
         />
         {errors.nombrePiece && <Text style={styles.errorText}>{errors.nombrePiece.message}</Text>}
-       <CustomButton  text="Créer le Projet" onPress={handleSubmit(projetPressed)} type="PRIMARY" />
+        <CustomButton text="Créer le Projet" onPress={handleSubmit(onSubmit)} type="PRIMARY" />
       </View>
     </View>
+  );
+};
 
-    );
-  };
-  const styles = StyleSheet.create({
-   container:{
-    flex:1,
-    padding:20
-   },
-   custombutton:{
-    padding:20,
-    marginHorizontal:140
-   },
-   root: {
+const styles = StyleSheet.create({
+  root: {
     flex: 1,
   },
   formContainer: {
@@ -101,9 +100,6 @@ const Projet = ({}) => {
     color: 'red',
     marginBottom: 10,
   },
-  button:{
-    padding:30,
-    marginHorizontal:120
-  }
-  })
-export default  Projet
+});
+
+export default ProjetScreen;

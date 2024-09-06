@@ -5,10 +5,15 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import axios from 'axios';
 import Svg, { Rect, Text as SvgText, Line } from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
-import Api from '../../../ApiUrl/Api'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SERVER_URL = 'http://192.168.1.19:5000/api/detection/detect'; // Replace with your server address
-const SERVER_URL_PHOTO = 'http://192.168.1.19:5000/api/projets//upload-photo/:projectId';
+
+
+const SERVER_URL = 'http://192.168.1.2:5000/api/detection/detect'; // Replace with your server address
+const SERVER_URL_PHOTO = 'http://192.168.1.2:5000/api/projets/upload-photo-model';
+const GET_USER = 'http://192.168.1.2:5000/api/user/currentclient';
+
+
 
 const CameraScreen = () => {
   const cameraRef = useRef(null);
@@ -21,7 +26,30 @@ const CameraScreen = () => {
   const [isDetecting, setIsDetecting] = useState(false);
   const [drawing, setDrawing] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [user, setUser] = useState({});
+  const [projet, setProjet] = useState({});
 
+  //recuperer le nom de l'utilisateur connecté
+  const fetchUserData = async () => {
+    try {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        console.log('storedToken :', storedToken)
+        const response = await axios.get(GET_USER, {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        });
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données utilisateur :', error);
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+  }, [user]);
+
+
+  //code camera
   useEffect(() => {
     const requestPermissions = async () => {
       const permission = await Camera.requestCameraPermission();
@@ -29,6 +57,7 @@ const CameraScreen = () => {
         await Linking.openSettings();
       }
     };
+
     requestPermissions();
   }, []);
 
@@ -56,7 +85,6 @@ const CameraScreen = () => {
         const width = (x2 - x1) * screen.width;
         const height = (y2 - y1) * screen.height;
 
-        // Adjust the dimensions based on the aspect ratio differences
         if (photoRatio > screenRatio) {
           const scaleFactor = screen.width / photoWidth;
           return {
@@ -80,7 +108,6 @@ const CameraScreen = () => {
         }
       });
 
-      // Set the updated boxes as the current boxes
       setBoxes(updatedBoxes);
     } catch (error) {
       console.log('Error sending photo to server:', error);
@@ -162,7 +189,9 @@ const CameraScreen = () => {
         console.log('Combined photo saved to gallery:', uri);
 
         // Send the combined photo to the server
+        const createur = user.nom;
         const formData = new FormData();
+        formData.append('createur', createur);
         formData.append('photo', {
           uri: Platform.OS === 'android' ? `file://${uri}` : uri,
           type: 'image/jpeg',
@@ -229,11 +258,11 @@ const CameraScreen = () => {
                     width={box.width}
                     height={box.height}
                     stroke="red"
-                    strokeWidth="2"
+                    strokeWidth="3"
                     fill="none"
                   />
                   <SvgText
-                    x={box.x + 5}
+                    x={box.x}
                     y={box.y - 10}
                     fill="red"
                     fontSize="12"
@@ -250,20 +279,18 @@ const CameraScreen = () => {
         </ViewShot>
       </View>
       <View style={styles.shutterContainer}>
-        <TouchableOpacity
-          style={styles.cameraFlashBtn}
-          onPress={() => setTorch(torch === 'off' ? 'on' : 'off')}>
-          <Text style={styles.flashText}>{torch === 'off' ? 'Flash On' : 'Flash Off'}</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={saveAndUploadPhoto}>
           <View style={styles.shutter}>
             <View style={styles.shutterBtn} />
           </View>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.cameraFlashBtn} onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}>
+          <Text style={styles.flashText}>{torch === 'on' ? 'Torch On' : 'Torch Off'}</Text>
+        </TouchableOpacity>
       </View>
       {loading && (
         <View style={styles.loading}>
-          <Text>Loading...</Text>
+          <Text>Saving and uploading photo...</Text>
         </View>
       )}
     </>
@@ -279,45 +306,43 @@ const styles = StyleSheet.create({
   shutterContainer: {
     position: 'absolute',
     bottom: 30,
+    flexDirection: 'row',
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-  },
-  shutter: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  shutterBtn: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'red',
   },
   cameraFlashBtn: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-    backgroundColor: 'grey',
     padding: 10,
-    borderRadius: 5,
   },
   flashText: {
     color: 'white',
+    fontSize: 18,
+  },
+  shutter: {
+    height: 60,
+    width: 60,
+    borderWidth: 2,
+    borderRadius: 60,
+    borderColor: 'white',
+  },
+  shutterBtn: {
+    top: 1,
+    left: 0.75,
+    backgroundColor: 'white',
+    height: 54,
+    width: 54,
+    borderRadius: 55,
   },
   loading: {
     position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -50 }, { translateY: -50 }],
     backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 20,
+    borderRadius: 10,
   },
 });
+
 
 export default CameraScreen;

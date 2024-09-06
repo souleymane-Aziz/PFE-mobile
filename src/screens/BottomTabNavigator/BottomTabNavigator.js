@@ -11,11 +11,13 @@ import MesProjets from '../../screens/home/MesProjets';
 import Scanner from '../../screens/home/Scanner';
 import Profil from '../../screens/home/Profil';
 import Apropos from '../../screens/home/Apropos';
-import listesProjets from '../../screens/home/listesProjets'
+import listesProjets from '../../screens/home/listesProjets';
+import photos from '../home/Photo';
 const TabArr = [
   { route: 'index', label: 'Accueil', type: Icons.Feather, icon: 'home', component: ColorScreen ,component:Accueil },
-  { route: 'MesProjets', label: 'MesProjets', type: Icons.Feather, icon: 'folder', component: ColorScreen,component:MesProjets },
-  { route: 'listesProjets', label: 'listesProjets', type: Icons.Feather, icon: 'list', component: ColorScreen,component:listesProjets },
+  { route: 'MesProjets', label: 'Scanner', type: Icons.MaterialIcons, icon: 'adf-scanner', component: ColorScreen,component:MesProjets },
+  { route: 'listesProjets', label: 'MesProjets', type: Icons.Feather, icon: 'list', component: ColorScreen,component:listesProjets },
+  { route: 'photo', label: 'Mesphotos', type: Icons.FontAwesome, icon: 'photo', component: ColorScreen,component:photos },
   { route: 'Profil', label: 'Profil', type: Icons.FontAwesome, icon: 'user-circle', component: ColorScreen , component:Profil  },
   { route: 'Apropos', label: 'Apropos', type: Icons.FontAwesome, icon: 'bookmark-o', component: ColorScreen ,component:Apropos },
 ];

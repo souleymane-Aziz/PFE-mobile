@@ -1,25 +1,34 @@
 import React from 'react';
-import { TextInput, View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import de l'icône
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { Controller } from 'react-hook-form';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CustomTextarea = ({ icon }) => {
+const CustomTextarea = ({ control, name, rules = {}, placeholder, icon }) => {
   return (
-    <View style={styles.container}>
-      {icon && (
-        <Icon
-          name={icon.name}
-          size={icon.size}
-          color={icon.color}
-          style={styles.icon}
-        />
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
+        <>
+          <View style={[styles.container, { borderColor: error ? 'red' : '#e8e8e8' }]}>
+            {icon && (
+              <Icon name={icon.name} size={icon.size} color={icon.color} style={{ padding: 10 }} />
+            )}
+            <TextInput
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              placeholder={placeholder}
+              multiline={true}
+              style={styles.textarea}
+              textAlignVertical="top" // Aligne le texte en haut
+            />
+          </View>
+          {error && <Text style={{ color: 'red', alignSelf: 'stretch' }}>{error.message || 'Error'}</Text>}
+        </>
       )}
-      <TextInput
-        style={[styles.textarea, icon && { paddingLeft: 15 }]} // Ajustement du paddingLeft si icône présente
-        placeholder="Description"
-        multiline={true}
-        numberOfLines={6}
-      />
-    </View>
+    />
   );
 };
 
@@ -28,24 +37,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'flex-start', // Aligner l'icône en haut
+    alignItems: 'flex-start',
     borderColor: '#e8e8e8',
     borderWidth: 1,
     borderRadius: 20,
     paddingHorizontal: 10,
     marginVertical: 5,
-    paddingTop: 10, // Ajouter un peu de padding en haut pour centrer le contenu
-  },
-  icon: {
-    paddingTop: 5,  // Positionner l'icône légèrement plus haut
-    paddingRight: 5, // Réduire l'espace entre l'icône et le placeholder
-    paddingLeft: 8
   },
   textarea: {
     flex: 1,
-    height: 100,
-    textAlignVertical: 'top',
-    paddingLeft: 0, // Alignement du texte à gauche de l'icône
+    height: 100, // Hauteur fixe pour le textarea
+    padding: 10, // Padding pour le texte
   },
 });
 
