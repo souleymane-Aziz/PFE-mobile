@@ -6,18 +6,19 @@ import axios from 'axios';
 import Svg, { Rect, Text as SvgText, Line } from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import Api from '../../../ApiUrl/Api'
 
-
-
-const SERVER_URL = 'http://192.168.1.2:5000/api/detection/detect'; // Replace with your server address
-const SERVER_URL_PHOTO = 'http://192.168.1.2:5000/api/projets/upload-photo-model';
-const GET_USER = 'http://192.168.1.2:5000/api/user/currentclient';
+const SERVER_URL = `${Api.defaults.baseURL}/api/detection/detect`; // Replace with your server address
+const SERVER_URL_PHOTO = `${Api.defaults.baseURL}/api/projets/upload-photo-model`;
+const GET_USER = `${Api.defaults.baseURL}/api/user/currentclient`;
 
 
 
 const CameraScreen = () => {
   const cameraRef = useRef(null);
   const viewShotRef = useRef(null);
+  const navigation = useNavigation(); // Initialisation de la navigation
   const [boxes, setBoxes] = useState([]);
   const [torch, setTorch] = useState('off');
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -27,14 +28,18 @@ const CameraScreen = () => {
   const [drawing, setDrawing] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [user, setUser] = useState({});
-  const [projet, setProjet] = useState({});
 
-  //recuperer le nom de l'utilisateur connecté
+  // Fonction pour quitter la caméra et naviguer vers l'écran "projet"
+  const handleQuit = () => {
+    navigation.navigate('listesProjets');
+  };
+
+  // Récupérer le nom de l'utilisateur connecté
   const fetchUserData = async () => {
     try {
       const storedToken = await AsyncStorage.getItem('token');
       if (storedToken) {
-        console.log('storedToken :', storedToken)
+        console.log('storedToken :', storedToken);
         const response = await axios.get(GET_USER, {
           headers: { Authorization: `Bearer ${storedToken}` }
         });
@@ -44,12 +49,12 @@ const CameraScreen = () => {
       console.error('Erreur lors de la récupération des données utilisateur :', error);
     }
   };
+
   useEffect(() => {
     fetchUserData();
   }, [user]);
 
-
-  //code camera
+  // Code de la caméra
   useEffect(() => {
     const requestPermissions = async () => {
       const permission = await Camera.requestCameraPermission();
@@ -61,6 +66,7 @@ const CameraScreen = () => {
     requestPermissions();
   }, []);
 
+  // Capture de l'image et détection des objets
   const detectObjects = useCallback(async (photoPath, photoWidth, photoHeight) => {
     try {
       const formData = new FormData();
@@ -287,6 +293,10 @@ const CameraScreen = () => {
         <TouchableOpacity style={styles.cameraFlashBtn} onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}>
           <Text style={styles.flashText}>{torch === 'on' ? 'Torch On' : 'Torch Off'}</Text>
         </TouchableOpacity>
+        {/* Bouton Quitter */}
+        <TouchableOpacity onPress={handleQuit} style={styles.quitBtn}>
+          <Text style={styles.quitText}>Quitter</Text>
+        </TouchableOpacity>
       </View>
       {loading && (
         <View style={styles.loading}>
@@ -318,6 +328,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
   },
+  quitBtn: {
+    padding: 10,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  quitText: {
+    color: 'white',
+    fontSize: 18,
+  },
   shutter: {
     height: 60,
     width: 60,
@@ -343,6 +362,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
 
 export default CameraScreen;

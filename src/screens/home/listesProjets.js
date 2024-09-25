@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
-
-const Scanner = () => {
+import Api from '../../../ApiUrl/Api'
+const ListesProjets = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://192.168.1.2:5000/api/projets/ClientProjects');
+        const response = await Api.get('/api/projets/ClientProjects');
         setProjects(response.data);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -50,7 +50,7 @@ const Scanner = () => {
                   {project.photos.map((photo, index) => (
                     <Image
                       key={index}
-                      source={{ uri: `http://192.168.1.2:5000/${photo}` }} // Adjust the URL as needed
+                      source={{ uri: `${Api.defaults.baseURL}/${photo}` }} // Adjust the URL as needed
                       style={styles.photo}
                     />
                   ))}
@@ -133,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Scanner;
+export default ListesProjets;

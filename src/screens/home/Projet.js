@@ -7,7 +7,7 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomInputArea from '../../components/CustomInputArea';
 import { useTheme } from 'react-native-paper';
-
+import Api from '../../../ApiUrl/Api'
 const ProjetScreen = () => {
   const { height } = useWindowDimensions();
   const navigation = useNavigation();
@@ -17,7 +17,7 @@ const ProjetScreen = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://192.168.1.2:5000/api/projets/CreateProjet', data, {
+      const response = await Api.post('/api/projets/CreateProjet', data, {
         withCredentials: true,
       });
       Alert.alert('Succès', 'Projet créé avec succès');

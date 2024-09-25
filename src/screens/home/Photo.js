@@ -54,7 +54,7 @@ const Photos = () => {
           photos.map((photo, index) => (
             <TouchableOpacity key={index} onPress={() => handlePhotoClick(index)}>
               <Image
-                source={{ uri: `http://192.168.1.2:5000/${photo}` }}
+                source={{ uri: `${Api.defaults.baseURL}/${photo}` }}
                 style={styles.photo}
                 resizeMode="cover"
               />
@@ -76,7 +76,7 @@ const Photos = () => {
           <View style={styles.modalContainer} {...panResponder.current.panHandlers}>
             <TouchableOpacity style={styles.modalBackground} onPress={handleCloseModal} activeOpacity={1}>
               <Image
-                source={{ uri: `http://192.168.1.2:5000/${photos[selectedPhotoIndex]}` }}
+                source={{ uri: `${Api.defaults.baseURL}/${photos[selectedPhotoIndex]}` }}
                 style={styles.modalImage}
                 resizeMode="contain"
               />

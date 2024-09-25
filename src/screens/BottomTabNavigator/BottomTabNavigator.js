@@ -11,7 +11,7 @@ import MesProjets from '../../screens/home/MesProjets';
 import Scanner from '../../screens/home/Scanner';
 import Profil from '../../screens/home/Profil';
 import Apropos from '../../screens/home/Apropos';
-import listesProjets from '../../screens/home/listesProjets';
+import listesProjets from '../../screens/home/ListesProjets';
 import photos from '../home/Photo';
 const TabArr = [
   { route: 'index', label: 'Accueil', type: Icons.Feather, icon: 'home', component: ColorScreen ,component:Accueil },
