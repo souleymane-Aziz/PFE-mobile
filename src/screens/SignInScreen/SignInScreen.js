@@ -90,9 +90,6 @@ const SignInScreen = () => {
      {value:3 ,
        message:'Le mot de passe doit comporter au moins 3 caractères'}}}
   />
-
-
-
     <CustomButton text="Se connecter" onPress={handleSubmit(onsignInPressed) } type="PRIMARY"/>
     <CustomButton text="Mot de passe oublié" onPress={onForgetPasswordPressed } type="TERTIARY"/>
     <CustomButton text="Vous n'avez pas un compte?créer une" onPress={onSignInPressed } type="TERTIARY"/>

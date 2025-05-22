@@ -33,7 +33,7 @@ const Navigation = () => {
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
         <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
         <Stack.Screen name="EditProfil" component={EditProfil} options={{headerShown: true}} />
-        <Stack.Screen name="Profil" component={Profil} />
+        <Stack.Screen name="Profil" component={Profil} options={{headerShown: true}}/>
         <Stack.Screen name="CameraScreen" component={CameraScreen} />
       </Stack.Navigator>
     </NavigationContainer>
